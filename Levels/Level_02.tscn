@@ -1,0 +1,225 @@
+[gd_scene load_steps=28 format=2]
+
+[ext_resource path="res://Scripts/Reset_Level.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/fall-zone.gd" type="Script" id=2]
+[ext_resource path="res://Prefabs/HUD.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Items/apple.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Prefabs/checkpoint.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Prefabs/FireTrap.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Prefabs/FallingPlataform.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Prefabs/TileMap.tscn" type="PackedScene" id=8]
+[ext_resource path="res://AssetsTutorialGodot2/Free/Terrain/4 - Cloud_cover_2.png" type="Texture" id=9]
+[ext_resource path="res://Items/banana.tscn" type="PackedScene" id=10]
+[ext_resource path="res://AssetsTutorialGodot2/Free/Terrain/1 - Foreground_scenery.png" type="Texture" id=11]
+[ext_resource path="res://AssetsTutorialGodot2/Free/Terrain/5 - Sky_color.png" type="Texture" id=12]
+[ext_resource path="res://AssetsTutorialGodot2/Free/Terrain/2 - Hills.png" type="Texture" id=13]
+[ext_resource path="res://AssetsTutorialGodot2/Free/Terrain/3 - Cloud_cover_1.png" type="Texture" id=14]
+[ext_resource path="res://Scenes/Mushroom.tscn" type="PackedScene" id=15]
+[ext_resource path="res://Prefabs/goal.tscn" type="PackedScene" id=16]
+[ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=17]
+[ext_resource path="res://Prefabs/Transition_in.tscn" type="PackedScene" id=18]
+[ext_resource path="res://Prefabs/Transition_out.tscn" type="PackedScene" id=19]
+[ext_resource path="res://Prefabs/MoveBox.tscn" type="PackedScene" id=20]
+[ext_resource path="res://Prefabs/trampoline.tscn" type="PackedScene" id=21]
+[ext_resource path="res://Prefabs/ChainSaw.tscn" type="PackedScene" id=22]
+[ext_resource path="res://Prefabs/Trigger.tscn" type="PackedScene" id=23]
+[ext_resource path="res://Scenes/Boss.tscn" type="PackedScene" id=24]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+uniform vec2 Direction = vec2(1.0,0.0);
+uniform float Speed = 0.02f;
+
+void fragment(){
+	COLOR = texture(TEXTURE, UV + (Direction * TIME * Speed));
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/Direction = Vector2( 1, 0 )
+shader_param/Speed = 0.02
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 400, 16 )
+
+[node name="Level_02" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="TileMap" parent="." instance=ExtResource( 8 )]
+
+[node name="Checkpoints" type="Node" parent="."]
+
+[node name="checkpoint" parent="Checkpoints" instance=ExtResource( 5 )]
+position = Vector2( 976, 160 )
+
+[node name="checkpoint2" parent="Checkpoints" instance=ExtResource( 5 )]
+position = Vector2( 2512, 160 )
+
+[node name="ChainSaw" parent="." instance=ExtResource( 22 )]
+
+[node name="goal" parent="." instance=ExtResource( 16 )]
+position = Vector2( 4288, 112 )
+
+[node name="Player" parent="." instance=ExtResource( 17 )]
+position = Vector2( 160, 64 )
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+current = true
+limit_left = -32
+limit_top = -100
+limit_bottom = 210
+limit_smoothed = true
+smoothing_enabled = true
+drag_margin_left = 0.4
+drag_margin_top = 0.3
+drag_margin_right = 0.4
+drag_margin_bottom = 0.3
+editor_draw_limits = true
+editor_draw_drag_margin = true
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="sky" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2( 576, 0 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/sky"]
+position = Vector2( 0, -180 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 12 )
+centered = false
+
+[node name="clouds" type="ParallaxLayer" parent="ParallaxBackground"]
+material = SubResource( 2 )
+motion_mirroring = Vector2( 576, 0 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/clouds"]
+position = Vector2( 0, -180 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 14 )
+centered = false
+
+[node name="cloud-mountain" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.6, 0.8 )
+motion_mirroring = Vector2( 576, 0 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/cloud-mountain"]
+position = Vector2( 0, -180 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 9 )
+centered = false
+
+[node name="mountain-trees" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.7, 1 )
+motion_mirroring = Vector2( 576, 0 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/mountain-trees"]
+position = Vector2( 0, -180 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 13 )
+centered = false
+
+[node name="fg-trees" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.8, 1 )
+motion_mirroring = Vector2( 576, 0 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/fg-trees"]
+position = Vector2( 0, -180 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 11 )
+centered = false
+
+[node name="fall-zone" type="Area2D" parent="."]
+position = Vector2( 720, 400 )
+collision_layer = 8
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="collision" type="CollisionShape2D" parent="fall-zone"]
+shape = SubResource( 3 )
+
+[node name="fall-zone2" type="Area2D" parent="."]
+position = Vector2( 2480, 304 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="collision" type="CollisionShape2D" parent="fall-zone2"]
+shape = SubResource( 3 )
+
+[node name="fruits" type="Node" parent="."]
+
+[node name="banana" parent="fruits" instance=ExtResource( 10 )]
+position = Vector2( 128, 112 )
+
+[node name="banana2" parent="fruits" instance=ExtResource( 10 )]
+position = Vector2( 304, -32 )
+
+[node name="apple" parent="fruits" instance=ExtResource( 4 )]
+position = Vector2( 448, 32 )
+
+[node name="apple2" parent="fruits" instance=ExtResource( 4 )]
+position = Vector2( 288, 64 )
+
+[node name="banana3" parent="fruits" instance=ExtResource( 10 )]
+position = Vector2( 464, 144 )
+
+[node name="Mushroom" parent="." instance=ExtResource( 15 )]
+position = Vector2( 288, 80 )
+
+[node name="FallingPlatforms" type="Node" parent="."]
+
+[node name="FallingPlatform" parent="FallingPlatforms" instance=ExtResource( 7 )]
+position = Vector2( 128, 48 )
+
+[node name="FallingPlatform2" parent="FallingPlatforms" instance=ExtResource( 7 )]
+position = Vector2( 384, 96 )
+
+[node name="FallingPlatform3" parent="FallingPlatforms" instance=ExtResource( 7 )]
+position = Vector2( 528, 96 )
+
+[node name="FallingPlatform4" parent="FallingPlatforms" instance=ExtResource( 7 )]
+position = Vector2( 864, 128 )
+
+[node name="FallingPlatform5" parent="FallingPlatforms" instance=ExtResource( 7 )]
+position = Vector2( 1072, 32 )
+
+[node name="HUD" parent="." instance=ExtResource( 3 )]
+
+[node name="Transition_in" parent="." instance=ExtResource( 18 )]
+
+[node name="Transition_out" parent="." instance=ExtResource( 19 )]
+
+[node name="MoveBox" parent="." instance=ExtResource( 20 )]
+position = Vector2( 398.234, 152.241 )
+
+[node name="trampoline" parent="." instance=ExtResource( 21 )]
+position = Vector2( 594.763, 146.819 )
+
+[node name="FireTrap" parent="." instance=ExtResource( 6 )]
+position = Vector2( 352, 160 )
+
+[node name="FireTrap2" parent="." instance=ExtResource( 6 )]
+position = Vector2( 1216, 160 )
+
+[node name="FireTrap3" parent="." instance=ExtResource( 6 )]
+position = Vector2( 1232, 160 )
+
+[node name="FireTrap4" parent="." instance=ExtResource( 6 )]
+position = Vector2( 1248, 160 )
+
+[node name="Trigger" parent="." instance=ExtResource( 23 )]
+position = Vector2( 3248, 192 )
+
+[node name="Boss" parent="." instance=ExtResource( 24 )]
+position = Vector2( 3342.28, -22.7935 )
+health = 6
+
+[connection signal="body_entered" from="fall-zone" to="fall-zone" method="_on_fallzone_body_entered"]
+[connection signal="body_entered" from="fall-zone2" to="fall-zone2" method="_on_fallzone_body_entered"]
+[connection signal="PlayerEntered" from="Trigger" to="Player" method="_on_Trigger_PlayerEntered"]
+[connection signal="PlayerEntered" from="Trigger" to="Boss" method="_on_Trigger_PlayerEntered"]
+
+[editable path="HUD"]
